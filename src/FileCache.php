@@ -34,7 +34,7 @@ class FileCache
 	 */
 	public function save($key, $value)
 	{
-
+		file_put_contents($this->getDir() . '/' . $key, json_encode($value));
 	}
 
 	/**
@@ -52,7 +52,7 @@ class FileCache
 	 */
 	public function hasKey($key)
 	{
-
+		return (file_exists($this->getDir() . '/' . $key));
 	}
 
 	/**
