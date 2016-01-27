@@ -46,7 +46,12 @@ class SmartCache
 	 */
 	public function load($key)
 	{
-		return $this->memoryCache->load($key);
+		if($this->memoryCache->hasKey($key)) {
+			return $this->memoryCache->load($key);
+		}
+		else if($this->fileCache->hasKey($key)) {
+			return $this->fileCache->load($key);
+		}
 	}
 
 	/**

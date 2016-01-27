@@ -77,4 +77,13 @@ class SmartCacheTest extends \PHPUnit_Framework_TestCase
 		$this->memoryCache->save('key', 'value');
 		$this->assertSame('value', $this->smartCache->load('key'));
 	}
+
+	/**
+	 * Test load method correctly by file cache
+	 */
+	public function testLoadFileCache()
+	{
+		$this->fileCache->save('key', 'value');
+		$this->assertSame('value', $this->smartCache->load('key'));
+	}
 }
