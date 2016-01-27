@@ -57,8 +57,7 @@ class FileCache
 	 * @return string
 	 */
 	public function getDir()
-	{
-		
+	{		
 		return $this->dir;
 	}
 
