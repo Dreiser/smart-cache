@@ -2,6 +2,8 @@
 
 namespace Hadamcik\SmartCache;
 
+require_once __DIR__ . '/Exceptions/KeyNotFoundException.php';
+
 /**
  * Class MemoryCache
  * @author Jakub Hadamčík <jakub@hadamcik.cz>
@@ -27,7 +29,10 @@ class MemoryCache
 	 */
 	public function load($key)
 	{
-		return $this->data[$key];
+		if($this->hasKey($key)) {
+			return $this->data[$key];
+		}
+		throw new KeyNotFoundException();
 	}
 
 	/**
