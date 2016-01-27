@@ -29,4 +29,13 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
 		$this->setExpectedException('Hadamcik\SmartCache\DirNotExistsException');
 		$fileCache = new FileCache('not exist');
 	}
+
+	/**
+	 * Test construct with not directory
+	 */
+	public function testConstructNotDir()
+	{
+		$this->setExpectedException('Hadamcik\SmartCache\NotDirException');
+		$fileCache = new FileCache(__DIR__ . '/FileCacheTest.php');
+	}
 }
