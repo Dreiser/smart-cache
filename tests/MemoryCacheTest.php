@@ -8,17 +8,37 @@ class MemoryCacheTest extends PHPUnit_Framework_TestCase
 	/** @var MemoryCache */
 	private $memoryCache;
 
+	/**
+	 * Test setUp
+	 */
 	public function setUp()
 	{
 		$this->memoryCache = new MemoryCache();
 	}
 
-	public function testHasKey() 
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @dataProvider hasKeyProvider
+	 */
+	public function testHasKey($key, $value) 
 	{
-		$key = 'key';
-		$value = 'value';
 		$this->assertFalse($this->memoryCache->hasKey($key));
 		$this->memoryCache->save($key, $value);
 		$this->assertTrue($this->memoryCache->hasKey($key));
+	}
+
+	/**
+	 * @return array
+	 */
+	public function hasKeyProvider()
+	{
+		return [
+			['key', 'value'],
+			['key', null],
+			['key', []],
+			['key', 0],
+			['key', false]
+		];
 	}
 }
