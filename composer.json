@@ -1,0 +1,6 @@
+{
+    "require": {
+        "jiriknesl/mockista": "^1.2",
+        "phpunit/phpunit": "^5.1"
+    }
+}
