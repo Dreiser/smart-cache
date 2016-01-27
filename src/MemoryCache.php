@@ -25,7 +25,7 @@ class MemoryCache
 	 */
 	public function load($key)
 	{
-
+		return $this->data[$key];
 	}
 
 	/**

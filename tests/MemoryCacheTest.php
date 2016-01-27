@@ -41,4 +41,29 @@ class MemoryCacheTest extends PHPUnit_Framework_TestCase
 			['key', false]
 		];
 	}
+
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @dataProvider loadProvider
+	 */
+	public function testLoad($key, $value)
+	{
+		$this->memoryCache->save($key, $value);
+		$this->assertSame($value, $this->memoryCache->load($key));
+	}
+
+	/**
+	 * @return array
+	 */
+	public function loadProvider()
+	{
+		return [
+			['key', 'value'],
+			['key', null],
+			['key', []],
+			['key', 0],
+			['key', false]
+		];
+	}
 }
