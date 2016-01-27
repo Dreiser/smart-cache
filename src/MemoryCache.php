@@ -6,7 +6,8 @@ require_once __DIR__ . '/Exceptions/KeyNotFoundException.php';
 
 /**
  * Class MemoryCache
- * @author Jakub Hadamčík <jakub@hadamcik.cz>
+ * @package Hadamcik\SmartCache
+ * @author Jakub Hadammčík <jakub@hadamcik.cz>
  */
 class MemoryCache
 {

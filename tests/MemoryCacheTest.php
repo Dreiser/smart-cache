@@ -5,13 +5,18 @@ namespace Hadamcik\SmartCache;
 require_once __DIR__ . '/../src/MemoryCache.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
+/**
+ * Class MemoryCacheTest
+ * @package Hadamcik\SmartCache
+ * @author Jakub Hadammčík <jakub@hadamcik.cz>
+ */
 class MemoryCacheTest extends \PHPUnit_Framework_TestCase
 {
 	/** @var MemoryCache */
 	private $memoryCache;
 
 	/**
-	 * Test setUp
+	 * Tests setUp
 	 */
 	public function setUp()
 	{
@@ -53,6 +58,9 @@ class MemoryCacheTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame('value', $this->memoryCache->load('key'));
 	}
 
+	/**
+	 * test load method with exception
+	 */
 	public function testLoadException()
 	{
 		$this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
