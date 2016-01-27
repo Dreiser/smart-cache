@@ -46,7 +46,7 @@ class SmartCache
 	 */
 	public function load($key)
 	{
-		
+		return $this->memoryCache->load($key);
 	}
 
 	/**
