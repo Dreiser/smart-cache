@@ -1,5 +1,7 @@
 <?php
 
+namespace Hadamcik\SmartCache;
+
 /**
  * Class MemoryCache
  * @author Jakub Hadamčík <jakub@hadamcik.cz>

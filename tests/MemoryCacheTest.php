@@ -1,9 +1,13 @@
 <?php
 
+namespace Hadamcik\SmartCache\Tests;
+
 require_once __DIR__ . '/../src/MemoryCache.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
-class MemoryCacheTest extends PHPUnit_Framework_TestCase
+use Hadamcik\SmartCache\MemoryCache;
+
+class MemoryCacheTest extends \PHPUnit_Framework_TestCase
 {
 	/** @var MemoryCache */
 	private $memoryCache;
