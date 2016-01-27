@@ -27,6 +27,7 @@ class MemoryCache
 	/**
 	 * @param string $key
 	 * @return mixed
+	 * @throws KeyNotFoundException
 	 */
 	public function load($key)
 	{
