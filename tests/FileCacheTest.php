@@ -80,4 +80,13 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
 		$this->fileCache->save('key', 'value');
 		$this->assertSame('value', $this->fileCache->load('key'));
 	}
+
+	/**
+	 * test load method with exception
+	 */
+	public function testLoadException()
+	{
+		$this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
+		$this->fileCache->load('unknown key');
+	}
 }

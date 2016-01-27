@@ -5,6 +5,7 @@ namespace Hadamcik\SmartCache;
 require_once __DIR__ . '/Exceptions/DirNotExistsException.php';
 require_once __DIR__ . '/Exceptions/DirNotWritableException.php';
 require_once __DIR__ . '/Exceptions/NotDirException.php';
+require_once __DIR__ . '/Exceptions/KeyNotFoundException.php';
 
 /**
  * Class FileCache
@@ -40,10 +41,14 @@ class FileCache
 	/**
 	 * @param string $key
 	 * @return mixed
+	 * @throws KeyNotFoundException
 	 */
 	public function load($key)
 	{
-		return json_decode(file_get_contents($this->getDir() . '/' . $key));
+		if($this->hasKey($key)) {
+			return json_decode(file_get_contents($this->getDir() . '/' . $key));
+		}
+		throw new KeyNotFoundException();
 	}
 
 	/**
