@@ -2,6 +2,8 @@
 
 namespace Hadamcik\SmartCache;
 
+require_once __DIR__ . '/SmartCacheException.php';
+
 /**
  * Class DirNotWritableException
  * @package Hadamcik\SmartCache

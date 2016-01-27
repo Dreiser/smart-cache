@@ -20,4 +20,13 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
 		$fileCache = new FileCache(__DIR__ . '/../temp');
 		$this->assertSame(__DIR__ . '/../temp', $fileCache->getDir());
 	}
+
+	/**
+	 * Test construct with not existing directory
+	 */
+	public function testConstructDirNotExist()
+	{
+		$this->setExpectedException('Hadamcik\SmartCache\DirNotExistsException');
+		$fileCache = new FileCache('not exist');
+	}
 }

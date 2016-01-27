@@ -2,7 +2,9 @@
 
 namespace Hadamcik\SmartCache;
 
-use SmartCache\FileCache\DirNotExistsException;
+require_once __DIR__ . '/Exceptions/DirNotExistsException.php';
+require_once __DIR__ . '/Exceptions/DirNotWritableException.php';
+require_once __DIR__ . '/Exceptions/NotDirException.php';
 
 /**
  * Class FileCache
