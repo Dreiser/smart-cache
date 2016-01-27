@@ -71,4 +71,13 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
 			['key', false]
 		];
 	}
+
+	/**
+	 * Test load method correctly
+	 */
+	public function testLoad()
+	{
+		$this->fileCache->save('key', 'value');
+		$this->assertSame('value', $this->fileCache->load('key'));
+	}
 }
