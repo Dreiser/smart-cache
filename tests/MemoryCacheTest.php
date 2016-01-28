@@ -60,7 +60,7 @@ class MemoryCacheTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * test load method with exception
+	 * Test load method with exception
 	 */
 	public function testLoadException()
 	{
