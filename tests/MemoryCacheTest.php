@@ -28,7 +28,7 @@ class MemoryCacheTest extends \PHPUnit_Framework_TestCase
 	 * @param mixed $value
 	 * @dataProvider hasKeyProvider
 	 */
-	public function testHasKey($key, $value) 
+	public function testHasKey($key, $value)
 	{
 		$this->assertFalse($this->memoryCache->hasKey($key));
 		$this->memoryCache->save($key, $value);

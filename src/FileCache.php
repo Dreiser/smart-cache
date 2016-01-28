@@ -64,7 +64,7 @@ class FileCache
 	 * @return string
 	 */
 	public function getDir()
-	{		
+	{
 		return $this->dir;
 	}
 
@@ -75,7 +75,7 @@ class FileCache
 	 * @throws NotDirException
 	 * @throws DirNotWritableException
 	 */
-	private function setDir($dir) 
+	private function setDir($dir)
 	{
 		if(!file_exists($dir)) {
 			throw new DirNotExistsException();

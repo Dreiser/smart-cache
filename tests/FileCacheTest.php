@@ -3,7 +3,10 @@
 namespace Hadamcik\SmartCache;
 
 require_once __DIR__ . '/../src/FileCache.php';
+require_once __DIR__ . '/Utils/Temp.php';
 require_once __DIR__ . '/../vendor/autoload.php';
+
+use Hadamcik\SmartCache\Tests\Utils\Temp;
 
 /**
  * Class FileCacheTest
@@ -12,81 +15,104 @@ require_once __DIR__ . '/../vendor/autoload.php';
  */
 class FileCacheTest extends \PHPUnit_Framework_TestCase
 {
-	/** @var FileCache */
-	private $fileCache;
+    /** @var FileCache */
+    private $fileCache;
 
-	public function setUp()
-	{
-		$this->fileCache = new FileCache(__DIR__ . '/temp');
-	}
+    /** @var string */
+    private $temp;
 
-	/**
-	 * Test construct method correctly
-	 */
-	public function testConstruct()
-	{
-		$fileCache = new FileCache(__DIR__ . '/temp');
-		$this->assertSame(__DIR__ . '/temp', $fileCache->getDir());
-	}
+    public function setUp()
+    {
+        $this->setTempDir(__DIR__ . '/temp/FileCache');
+        Temp::cleanUp($this->getTempDir());
+        $this->fileCache = new FileCache($this->getTempDir());
+    }
 
-	/**
-	 * Test construct with not existing directory
-	 */
-	public function testConstructDirNotExist()
-	{
-		$this->setExpectedException('Hadamcik\SmartCache\DirNotExistsException');
-		$fileCache = new FileCache('not exist');
-	}
+    /**
+     * Test construct method correctly
+     */
+    public function testConstruct()
+    {
+        $fileCache = new FileCache($this->getTempDir());
+        $this->assertSame($this->getTempDir(), $fileCache->getDir());
+    }
 
-	/**
-	 * Test construct with not directory
-	 */
-	public function testConstructNotDir()
-	{
-		$this->setExpectedException('Hadamcik\SmartCache\NotDirException');
-		$fileCache = new FileCache(__DIR__ . '/FileCacheTest.php');
-	}
+    /**
+     * Test construct with not existing directory
+     */
+    public function testConstructDirNotExist()
+    {
+        $this->setExpectedException('Hadamcik\SmartCache\DirNotExistsException');
+        $fileCache = new FileCache('not exist');
+    }
 
-	/**
-	 * @param string $key
-	 * @param mixed $value
-	 * @dataProvider hasKeyProvider
-	 */
-	public function testHasKey($key, $value)
-	{
-		$this->fileCache->save($key, $value);
-		$this->assertTrue($this->fileCache->hasKey($key));
-	}
+    /**
+     * Test construct with not directory
+     */
+    public function testConstructNotDir()
+    {
+        $this->setExpectedException('Hadamcik\SmartCache\NotDirException');
+        $fileCache = new FileCache(__DIR__ . '/FileCacheTest.php');
+    }
 
-	/**
-	 * @return array
-	 */
-	public function hasKeyProvider()
-	{
-		return [
-			['key', 'value'],
-			['key', null],
-			['key', []],
-			['key', 0],
-			['key', false]
-		];
-	}
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @dataProvider hasKeyProvider
+     */
+    public function testHasKey($key, $value)
+    {
+        $this->fileCache->save($key, $value);
+        $this->assertTrue($this->fileCache->hasKey($key));
+    }
 
-	/**
-	 * Test load method correctly
-	 */
-	public function testLoad()
+    /**
+     * @return array
+     */
+    public function hasKeyProvider()
 	{
-		$this->fileCache->save('key', 'value');
-		$this->assertSame('value', $this->fileCache->load('key'));
-	}
+        return [
+            ['key', 'value'],
+            ['key', null],
+            ['key', []],
+            ['key', 0],
+            ['key', false]
+        ];
+    }
 
-	/**
-	 * test load method with exception
-	 */
-	public function testLoadException()
-	{
-		$this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
-		$this->fileCache->load('unknown key');
-	}
+    /**
+     * Test load method correctly
+     */
+    public function testLoad()
+    {
+        $this->fileCache->save('key', 'value');
+        $this->assertSame('value', $this->fileCache->load('key'));
+    }
+
+    /**
+     * test load method with exception
+     */
+    public function testLoadException()
+    {
+        $this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
+        $this->fileCache->load('unknown key');
+    }
+
+    /**
+     * @return string
+     */
+    private function getTempDir()
+    {
+    	return $this->temp;
+    }
+
+    /**
+     * @param string $temp
+     * @return FileCacheTest
+     */
+    private function setTempDir($temp)
+    {
+    	$this->temp = $temp;
+    	return $this;
+    }
 }

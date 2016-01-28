@@ -52,6 +52,7 @@ class SmartCache
 		else if($this->fileCache->hasKey($key)) {
 			return $this->fileCache->load($key);
 		}
+		throw new KeyNotFoundException();
 	}
 
 	/**

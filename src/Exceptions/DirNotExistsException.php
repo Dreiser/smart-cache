@@ -11,5 +11,5 @@ require_once __DIR__ . '/SmartCacheException.php';
  */
 class DirNotExistsException extends SmartCacheException
 {
-	
+
 }
