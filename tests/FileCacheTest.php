@@ -24,7 +24,7 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->setTempDir(__DIR__ . '/temp/FileCache');
-        //Temp::cleanUp($this->getTempDir());
+        Temp::cleanUp($this->getTempDir());
         $this->fileCache = new FileCache($this->getTempDir());
     }
 
