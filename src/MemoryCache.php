@@ -21,7 +21,12 @@ class MemoryCache
 	 */
 	public function save($key, $value)
 	{
-		$this->data[$key] = $value;
+		if(is_object($value)) {
+			$this->data[$key] = clone $value;
+		}
+		else {
+			$this->data[$key] = $value;
+		}
 	}
 
 	/**
