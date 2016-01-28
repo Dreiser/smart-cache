@@ -35,7 +35,7 @@ class FileCache
 	 */
 	public function save($key, $value)
 	{
-		file_put_contents($this->getDir() . '/' . $key, json_encode($value));
+		file_put_contents($this->getDir() . '/' . $key, serialize($value));
 	}
 
 	/**
@@ -46,7 +46,7 @@ class FileCache
 	public function load($key)
 	{
 		if($this->hasKey($key)) {
-			return json_decode(file_get_contents($this->getDir() . '/' . $key));
+			return unserialize(file_get_contents($this->getDir() . '/' . $key));
 		}
 		throw new KeyNotFoundException();
 	}

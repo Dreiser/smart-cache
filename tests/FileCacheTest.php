@@ -24,7 +24,7 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->setTempDir(__DIR__ . '/temp/FileCache');
-        Temp::cleanUp($this->getTempDir());
+        //Temp::cleanUp($this->getTempDir());
         $this->fileCache = new FileCache($this->getTempDir());
     }
 
@@ -96,6 +96,19 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
         $this->fileCache->load('unknown key');
+    }
+
+    /**
+     * Test load method correctly
+     */
+    public function testLoadObject()
+    {
+        $object = new TestClass('value');
+        $object->publicParam = 'public';
+        $this->fileCache->save('object', $object);
+        $this->assertEquals($object, $this->fileCache->load('object'));
+        $object->setPrivateParam('new value');
+        $this->assertNotEquals($object, $this->fileCache->load('object'));
     }
 
     /**
