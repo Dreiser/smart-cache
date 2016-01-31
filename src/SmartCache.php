@@ -36,7 +36,8 @@ class SmartCache
 	 */
 	public function save($key, $value)
 	{
-
+		$this->memoryCache->save($key, $value);
+		$this->fileCache->save($key, $value);
 	}
 
 	/**
