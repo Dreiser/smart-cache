@@ -5,10 +5,14 @@ namespace Hadamcik\SmartCache;
 require_once __DIR__ . '/../../src/SmartCache.php';
 require_once __DIR__ . '/../../src/FileCache.php';
 require_once __DIR__ . '/../../src/MemoryCache.php';
+require_once __DIR__ . '/../../src/Exceptions/Utils/Filemanager/FileWriteFailedException.php';
+require_once __DIR__ . '/../../src/Exceptions/Utils/Filemanager/FileOpenFailedException.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../vendor/jiriknesl/mockista/bootstrap.php';
 
 use Mockista;
+use Hadamcik\SmartCache\Utils\Filemanager\FileWriteFailedException;
+use Hadamcik\SmartCache\Utils\Filemanager\FileOpenFailedException;
 
 /**
  * Class SmartCacheUnitTest
@@ -47,7 +51,10 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 		$this->fileCacheMock->freeze();
 
 		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
-		$smartCache->save(self::KEY, self::VALUE);		
+		$smartCache->save(self::KEY, self::VALUE);	
+
+		$this->memoryCacheMock->assertExpectations();
+		$this->fileCacheMock->assertExpectations();
 	}
 
 	/**
@@ -58,10 +65,13 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 		$this->memoryCacheMock->save(self::KEY, self::VALUE)->once();
 		$this->memoryCacheMock->freeze();
 
-		$this->fileCacheMock->save(self::KEY, self::VALUE)->once()->andThrows('Hadamcik\\SmartCache\\Utils\\Filemanager\\FileOpenFailedException');
+		$fileOpenFailedException = new FileOpenFailedException();
+
+		$this->fileCacheMock->save(self::KEY, self::VALUE)->once()->andThrow($fileOpenFailedException);
 		$this->fileCacheMock->freeze();
 
 		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
+		$this->setExpectedException('Hadamcik\\SmartCache\\Utils\\Filemanager\\FileOpenFailedException');
 		$smartCache->save(self::KEY, self::VALUE);	
 	}
 
@@ -73,10 +83,13 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 		$this->memoryCacheMock->save(self::KEY, self::VALUE)->once();
 		$this->memoryCacheMock->freeze();
 
-		$this->fileCacheMock->save(self::KEY, self::VALUE)->once()->andThrows('Hadamcik\\SmartCache\\Utils\\Filemanager\\FileWriteFailedException');
+		$fileWriteFailedException = new FileWriteFailedException();
+
+		$this->fileCacheMock->save(self::KEY, self::VALUE)->once()->andThrow($fileWriteFailedException);
 		$this->fileCacheMock->freeze();
 
 		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
+		$this->setExpectedException('Hadamcik\\SmartCache\\Utils\\Filemanager\\FileWriteFailedException');
 		$smartCache->save(self::KEY, self::VALUE);	
 	}
 
@@ -95,6 +108,9 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 
 		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
 		$this->assertTrue($smartCache->hasKey($key));
+
+		$this->memoryCacheMock->assertExpectations();
+		$this->fileCacheMock->assertExpectations();
 	}
 
 	/**
@@ -107,11 +123,14 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 		$this->memoryCacheMock->hasKey($key)->once()->andReturn(true);
 		$this->memoryCacheMock->freeze();
 
-		$this->fileCacheMock->hasKey($key)->once()->andReturn(false);
+		$this->fileCacheMock->hasKey($key)->never();
 		$this->fileCacheMock->freeze();
 
 		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
 		$this->assertTrue($smartCache->hasKey($key));
+
+		$this->memoryCacheMock->assertExpectations();
+		$this->fileCacheMock->assertExpectations();
 	}
 
 	/**
@@ -143,6 +162,9 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 
 		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
 		$this->assertSame(self::VALUE, $smartCache->load(self::KEY));
+
+		$this->memoryCacheMock->assertExpectations();
+		$this->fileCacheMock->assertExpectations();
 	}
 
 	/**
@@ -160,6 +182,9 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 
 		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
 		$this->assertSame(self::VALUE, $smartCache->load(self::KEY));
+
+		$this->memoryCacheMock->assertExpectations();
+		$this->fileCacheMock->assertExpectations();
 	}
 
 	/**
@@ -176,7 +201,7 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 		$this->fileCacheMock->freeze();
 
 		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
-		$this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
+		$this->setExpectedException('Hadamcik\\SmartCache\\KeyNotFoundException');
 		$smartCache->load(self::KEY);
 	}
 }
