@@ -7,11 +7,11 @@ require_once __DIR__ . '/TestClass.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
- * Class MemoryCacheTest
+ * Class MemoryCacheUnitTest
  * @package Hadamcik\SmartCache
  * @author Jakub Hadammčík <jakub@hadamcik.cz>
  */
-class MemoryCacheTest extends \PHPUnit_Framework_TestCase
+class MemoryCacheUnitTest extends \PHPUnit_Framework_TestCase
 {
 	/** @var MemoryCache */
 	private $memoryCache;

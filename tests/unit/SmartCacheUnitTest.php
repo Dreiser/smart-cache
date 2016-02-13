@@ -1,0 +1,140 @@
+<?php
+
+namespace Hadamcik\SmartCache;
+
+require_once __DIR__ . '/../src/SmartCache.php';
+require_once __DIR__ . '/../src/FileCache.php';
+require_once __DIR__ . '/../src/MemoryCache.php';
+require_once __DIR__ . '/Utils/Temp.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/jiriknesl/mockista/bootstrap.php';
+
+use Mockista;
+use Hadamcik\SmartCache\Tests\Utils\Temp;
+
+/**
+ * Class SmartCacheUnitTest
+ * @package Hadamcik\SmartCache
+ * @author Jakub Hadammčík <jakub@hadamcik.cz>
+ */
+class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
+{
+	const PATH = 'path';
+    const KEY = 'key';
+    const VALUE = 'value';
+    const SERIALIZED_VALUE = 's:5:"value";';
+
+	/** @var Mockista\Mock */
+	private $fileCacheMock;
+
+	/** @var Mockista\Mock */
+	private $memoryCacheMock;
+
+	/**
+	 * Tests setUp
+	 */
+	public function setUp()
+	{
+		$this->fileCacheMock = Mockista\mock('Hadamcik\\SmartCache\\FileCache');
+		$this->memoryCacheMock = Mockista\mock('Hadamcik\\SmartCache\\MemoryCache');
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @dataProvider hasKeyProvider
+	 */
+	public function testHasKeyFileCache($key, $value)
+	{
+		$this->memoryCacheMock->hasKey($key)->once()->andReturn(false);
+		$this->memoryCacheMock->freeze();
+
+		$this->fileCacheMock->hasKey($key)->once()->andReturn(true);
+		$this->fileCacheMock->freeze();
+
+		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
+		$this->assertTrue($smartCache->hasKey($key));
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @dataProvider hasKeyProvider
+	 */
+	public function testHasKeyMemoryCache($key, $value)
+	{
+		$this->memoryCacheMock->hasKey($key)->once()->andReturn(true);
+		$this->memoryCacheMock->freeze();
+
+		$this->fileCacheMock->hasKey($key)->once()->andReturn(false);
+		$this->fileCacheMock->freeze();
+
+		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
+		$this->assertTrue($smartCache->hasKey($key));
+	}
+
+	/**
+	 * @return array
+	 */
+	public function hasKeyProvider()
+	{
+		return [
+			['key', 'value'],
+			['key', null],
+			['key', []],
+			['key', 0],
+			['key', false]
+		];
+	}
+
+	/**
+	 * Test load method correctly by memory cache
+	 */
+	public function testLoadMemoryCache()
+	{
+		$this->memoryCacheMock->hasKey(self::KEY)->once()->andReturn(true);
+		$this->memoryCacheMock->load(self::KEY)->once()->andReturn(self::VALUE);
+		$this->memoryCacheMock->freeze();
+
+		$this->fileCacheMock->hasKey()->never();
+		$this->fileCacheMock->load()->never();
+		$this->fileCacheMock->freeze();
+
+		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
+		$this->assertSame(self::VALUE, $this->smartCache->load(self::KEY));
+	}
+
+	/**
+	 * Test load method correctly by file cache
+	 */
+	public function testLoadFileCache()
+	{
+		$this->memoryCacheMock->hasKey(self::KEY)->once()->andReturn(false);
+		$this->memoryCacheMock->load(self::KEY)->never();
+		$this->memoryCacheMock->freeze();
+
+		$this->fileCacheMock->hasKey(self::KEY)->once()->andReturn(true);
+		$this->fileCacheMock->load(self::KEY)->once()->andReturn(self::VALUE);
+		$this->fileCacheMock->freeze();
+
+		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
+		$this->assertSame(self::VALUE, $this->smartCache->load(self::KEY));
+	}
+
+	/**
+	 * Test load method key not found exception
+	 */
+	public function testLoadKeyNotFoundException()
+	{
+		$this->memoryCacheMock->hasKey(self::KEY)->once()->andReturn(false);
+		$this->memoryCacheMock->load(self::KEY)->never();
+		$this->memoryCacheMock->freeze();
+
+		$this->fileCacheMock->hasKey(self::KEY)->once()->andReturn(false);
+		$this->fileCacheMock->load(self::KEY)->never();
+		$this->fileCacheMock->freeze();
+
+		$this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
+		$this->smartCache->load(self::KEY);
+	}
+}
