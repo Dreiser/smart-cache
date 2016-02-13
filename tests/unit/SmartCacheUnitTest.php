@@ -44,14 +44,29 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSave()
 	{
-		$this->fileCacheMock->save(self::KEY, self::VALUE)->once();
-		$this->fileCacheMock->freeze();
-
 		$this->memoryCacheMock->save(self::KEY, self::VALUE)->once();
 		$this->memoryCacheMock->freeze();
 
+		$this->fileCacheMock->save(self::KEY, self::VALUE)->once();
+		$this->fileCacheMock->freeze();
+
 		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
 		$smartCache->save(self::KEY, self::VALUE);		
+	}
+
+	/**
+	 * Test save method with file open failed exception
+	 */
+	public function testSaveFileOpenFailed()
+	{
+		$this->memoryCacheMock->save(self::KEY, self::VALUE)->once();
+		$this->memoryCacheMock->freeze();
+
+		$this->fileCacheMock->save(self::KEY, self::VALUE)->once()->andThrows('Hadamcik\\SmartCache\\Utils\\Filemanager\\FileOpenFailedException');
+		$this->fileCacheMock->freeze();
+
+		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
+		$smartCache->save(self::KEY, self::VALUE);	
 	}
 
 	/**

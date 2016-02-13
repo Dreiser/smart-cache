@@ -33,6 +33,8 @@ class SmartCache
 	 * @param string $key
 	 * @param mixed $value
 	 * @return void
+	 * @throws FileOpenFailedException
+	 * @throws FileWriteFailedException
 	 */
 	public function save($key, $value)
 	{
