@@ -4,7 +4,6 @@ namespace Hadamcik\SmartCache;
 
 require_once __DIR__ . '/FileCache.php';
 require_once __DIR__ . '/MemoryCache.php';
-require_once __DIR__ . '/Exceptions/KeyNotFoundException.php';
 
 /**
  * Class SmartCache

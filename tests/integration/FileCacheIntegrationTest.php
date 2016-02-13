@@ -5,9 +5,11 @@ namespace Hadamcik\SmartCache;
 require_once __DIR__ . '/TestClass.php';
 require_once __DIR__ . '/../../src/FileCache.php';
 require_once __DIR__ . '/../../src/Utils/Filemanager/Filemanager.php';
+require_once __DIR__ . '/../../src/Utils/Filemanager/Directory.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Hadamcik\SmartCache\Utils\Filemanager\Filemanager;
+use Hadamcik\SmartCache\Utils\Filemanager\Directory;
 
 /**
  * Class FileCacheIntegrationTest
@@ -30,7 +32,7 @@ class FileCacheIntegrationTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         @mkdir($this->getTempPath());
         $this->filemanager = new Filemanager();
-        $this->tempDir = $this->filemanager->getDirectory($this->getTempPath());  
+        $this->tempDir = new Directory($this->getTempPath());  
         $this->tempDir->cleanUp();
     }
 
