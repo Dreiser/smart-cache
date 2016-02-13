@@ -171,7 +171,7 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
 
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
 
-        $this->assertSame(true, $fileCache->hasKey(self::KEY));
+        $this->assertTrue($fileCache->hasKey(self::KEY));
     }
 
     /**
