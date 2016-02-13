@@ -49,10 +49,12 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
     public function testSetDir()
     {
         $this->setDir(); 
+        $this->filemanagerMock->freeze();
 
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
 
         $this->assertInstanceOf('Hadamcik\\SmartCache\\FileCache', $fileCache);
+        $this->filemanagerMock->assertExpectations();
     }
 
     /**
@@ -95,6 +97,9 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
 
         $this->assertInstanceOf('Hadamcik\\SmartCache\\Utils\\Filemanager\\RegularFile', $fileCache->save(self::KEY, self::VALUE));
+
+        $this->directoryMock->assertExpectations();
+        $this->filemanagerMock->assertExpectations();
     }
 
     /**
@@ -116,6 +121,10 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
 
         $this->assertSame(self::VALUE, $fileCache->load(self::KEY));
+
+        $this->regularFileMock->assertExpectations();
+        $this->directoryMock->assertExpectations();
+        $this->filemanagerMock->assertExpectations();
     }
 
     /**
@@ -151,6 +160,9 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
 
         $this->assertTrue($fileCache->hasKey(self::KEY));
+
+        $this->directoryMock->assertExpectations();
+        $this->filemanagerMock->assertExpectations();
     }
 
     /**
@@ -167,10 +179,10 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
      */
     private function setDir($path = self::PATH)
     {
-        $this->filemanagerMock->fileExists($path)->once()->andReturn(true);
-        $this->filemanagerMock->isDir($path)->once()->andReturn(true);
-        $this->filemanagerMock->isWritable($path)->once()->andReturn(true);
-        $this->filemanagerMock->getDirectory($path)->once()->andReturn($this->directoryMock);
+        $this->filemanagerMock->fileExists($path)->atLeastOnce()->andReturn(true);
+        $this->filemanagerMock->isDir($path)->atLeastOnce()->andReturn(true);
+        $this->filemanagerMock->isWritable($path)->atLeastOnce()->andReturn(true);
+        $this->filemanagerMock->getDirectory($path)->atLeastOnce()->andReturn($this->directoryMock);
     }
 
     /**
@@ -179,6 +191,6 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
      */
     private function getDir($path = self::PATH)
     {
-        $this->directoryMock->getPath()->once()->andReturn(self::PATH);        
+        $this->directoryMock->getPath()->atLeastOnce()->andReturn(self::PATH);        
     }
 }
