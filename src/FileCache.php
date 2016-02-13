@@ -56,7 +56,6 @@ class FileCache
 	 * @param string $key
 	 * @return mixed
 	 * @throws KeyNotFoundException
-	 * @throws FileDoNotExistsException
 	 */
 	public function load($key)
 	{

@@ -137,27 +137,6 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test load file do not exist exception
-     */
-    public function testLoadFileDoNotExist()
-    {
-        $this->setDir(); 
-        $this->getDir();
-        $this->directoryMock->freeze();
-
-        $filedoNotExistException = new FileDoNotExistsException;
-
-        $this->filemanagerMock->fileExists($this->getCachedFilePath())->once()->andReturn(true);
-        $this->filemanagerMock->getRegularFile($this->getCachedFilePath())->once()->andThrow($filedoNotExistException);
-        $this->filemanagerMock->freeze();
-
-        $fileCache = new FileCache(self::PATH, $this->filemanagerMock);        
-
-        $this->setExpectedException('Hadamcik\\SmartCache\\Utils\\Filemanager\\FileDoNotExistsException');
-        $fileCache->load(self::KEY);
-    }
-
-    /**
      * Test hasKey method
      */
     public function testHasKey()
