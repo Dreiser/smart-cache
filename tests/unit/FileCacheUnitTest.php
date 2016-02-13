@@ -31,6 +31,9 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
     /** @var Mockista\Mock */
     private $filemanagerMock;
 
+    /**
+     * FileCacheUnitTest constructor
+     */
     public function __construct()
     {
         $this->regularFileMock = Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\RegularFile');
@@ -75,7 +78,10 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
         return self::PATH . '/' . self::KEY;
     }
 
-
+    /**
+     * Sets mock expectations for called method setDir in FileCache
+     * @return void
+     */
     private function setDir()
     {
         $this->filemanagerMock->fileExists(self::PATH)->once()->andReturn(true);
