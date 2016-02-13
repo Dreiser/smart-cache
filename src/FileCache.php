@@ -47,7 +47,7 @@ class FileCache
 	 */
 	public function save($key, $value)
 	{
-		return $this->filemanager->createFile($this->getDir() . '/' . $key, serialize($value));
+		return $this->filemanager->createFile($this->getCacheFilePath($key), serialize($value));
 	}
 
 	/**
@@ -58,7 +58,7 @@ class FileCache
 	public function load($key)
 	{
 		if($this->hasKey($key)) {
-			$file = new RegularFile($this->getDir() . '/' . $key);
+			$file = $this->filemanager->getRegularFile($this->getCacheFilePath($key));
 			return unserialize($file->getContent());
 		}
 		throw new KeyNotFoundException();
@@ -70,7 +70,7 @@ class FileCache
 	 */
 	public function hasKey($key)
 	{
-		return $this->filemanager->fileExists($this->getDir() . '/' . $key);
+		return $this->filemanager->fileExists($this->getCacheFilePath($key));
 	}
 
 	/**
@@ -101,5 +101,14 @@ class FileCache
 		}
 		$this->dir = $this->filemanager->getDirectory($path);
 		return $this;
+	}
+
+	/**
+	 * Return path to cached file
+	 * @return string
+	 */
+	private function getCacheFilePath($key)
+	{
+		return $this->getDir() . '/' . $key;
 	}
 }

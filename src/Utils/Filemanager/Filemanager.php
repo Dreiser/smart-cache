@@ -66,4 +66,12 @@ class Filemanager
 	{
 		return new Directory($path);
 	}
+
+	/**
+	 * @return RegularFile
+	 */
+	public function getRegularFile($path)
+	{
+		return new RegularFile($path);
+	}
 }

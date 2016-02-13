@@ -20,7 +20,7 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
     const PATH = 'path';
     const KEY = 'key';
     const VALUE = 'value';
-    const SERIALIZE_VALUE = 's:5:"value";';
+    const SERIALIZED_VALUE = 's:5:"value";';
 
     /** @var Mockista\Mock */
     private $regularFileMock;
@@ -47,6 +47,7 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetDir()
     {
+        $this->regularFileMock->freeze();
         $this->directoryMock->freeze();
         $this->filemanagerMock->freeze();
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
@@ -63,7 +64,7 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
         $this->directoryMock->getPath()->once()->andReturn(self::PATH);
         $this->directoryMock->freeze();
 
-        $this->filemanagerMock->createFile($this->getCachedFilePath(), self::SERIALIZE_VALUE)->andReturn($this->regularFileMock);
+        $this->filemanagerMock->createFile($this->getCachedFilePath(), self::SERIALIZED_VALUE)->andReturn($this->regularFileMock);
         $this->filemanagerMock->freeze();
 
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
@@ -71,22 +72,38 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test load method
+     */
+    public function testLoad()
+    {
+        $this->directoryMock->getPath()->once()->andReturn(self::PATH);
+        $this->directoryMock->freeze();
+        $this->filemanagerMock->fileExists($this->getCachedFilePath())->once()->andReturn(true);
+        $this->filemanagerMock->getRegularFile($this->getCachedFilePath())->once()->andReturn($this->regularFileMock);
+        $this->filemanagerMock->freeze();
+        $this->regularFileMock->getContent()->once()->andReturn(self::SERIALIZED_VALUE);
+        $this->regularFileMock->freeze();
+        $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
+        $this->assertSame(self::VALUE, $fileCache->load(self::KEY));
+    }
+
+    /**
      * @return string
      */
-    private function getCachedFilePath()
+    private function getCachedFilePath($path = self::PATH, $key = self::KEY)
     {
-        return self::PATH . '/' . self::KEY;
+        return $path . '/' . $key;
     }
 
     /**
      * Sets mock expectations for called method setDir in FileCache
      * @return void
      */
-    private function setDir()
+    private function setDir($path = self::PATH)
     {
-        $this->filemanagerMock->fileExists(self::PATH)->once()->andReturn(true);
-        $this->filemanagerMock->isDir(self::PATH)->once()->andReturn(true);
-        $this->filemanagerMock->isWritable(self::PATH)->once()->andReturn(true);
-        $this->filemanagerMock->getDirectory(self::PATH)->once()->andReturn($this->directoryMock);
+        $this->filemanagerMock->fileExists($path)->once()->andReturn(true);
+        $this->filemanagerMock->isDir($path)->once()->andReturn(true);
+        $this->filemanagerMock->isWritable($path)->once()->andReturn(true);
+        $this->filemanagerMock->getDirectory($path)->once()->andReturn($this->directoryMock);
     }
 }
