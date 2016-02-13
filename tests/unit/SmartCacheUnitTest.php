@@ -2,15 +2,13 @@
 
 namespace Hadamcik\SmartCache;
 
-require_once __DIR__ . '/../src/SmartCache.php';
-require_once __DIR__ . '/../src/FileCache.php';
-require_once __DIR__ . '/../src/MemoryCache.php';
-require_once __DIR__ . '/Utils/Temp.php';
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../src/SmartCache.php';
+require_once __DIR__ . '/../../src/FileCache.php';
+require_once __DIR__ . '/../../src/MemoryCache.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../vendor/jiriknesl/mockista/bootstrap.php';
 
 use Mockista;
-use Hadamcik\SmartCache\Tests\Utils\Temp;
 
 /**
  * Class SmartCacheUnitTest
@@ -141,12 +139,12 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 		$this->memoryCacheMock->load(self::KEY)->once()->andReturn(self::VALUE);
 		$this->memoryCacheMock->freeze();
 
-		$this->fileCacheMock->hasKey()->never();
-		$this->fileCacheMock->load()->never();
+		$this->fileCacheMock->hasKey(self::KEY)->never();
+		$this->fileCacheMock->load(self::KEY)->never();
 		$this->fileCacheMock->freeze();
 
 		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
-		$this->assertSame(self::VALUE, $this->smartCache->load(self::KEY));
+		$this->assertSame(self::VALUE, $smartCache->load(self::KEY));
 	}
 
 	/**
@@ -163,7 +161,7 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 		$this->fileCacheMock->freeze();
 
 		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
-		$this->assertSame(self::VALUE, $this->smartCache->load(self::KEY));
+		$this->assertSame(self::VALUE, $smartCache->load(self::KEY));
 	}
 
 	/**
@@ -179,7 +177,8 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 		$this->fileCacheMock->load(self::KEY)->never();
 		$this->fileCacheMock->freeze();
 
+		$smartCache = new SmartCache($this->fileCacheMock, $this->memoryCacheMock);
 		$this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
-		$this->smartCache->load(self::KEY);
+		$smartCache->load(self::KEY);
 	}
 }
