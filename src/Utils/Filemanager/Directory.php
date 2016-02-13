@@ -11,5 +11,16 @@ require_once __DIR__ . '/File.php';
  */
 class Directory extends File
 {
-	
+	/**
+	 * Clean up dir
+	 */
+	public function cleanUp()
+	{
+        $files = scandir($this->getPath());
+        foreach ($files as $file) {
+        	if($file !== '.' && $file !== '..') {
+            	unlink($this->getPath() . '/' . $file);
+        	}
+        }
+	}
 }

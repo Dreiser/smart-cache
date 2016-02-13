@@ -32,14 +32,15 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
     private $filemanagerMock;
 
     /**
-     * FileCacheUnitTest constructor
+     * Tests setUp
      */
-    public function __construct()
+    public function setUp()
     {
+        parent::setUp();
         $this->regularFileMock = Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\RegularFile');
         $this->directoryMock = Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\Directory');
         $this->filemanagerMock = Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\Filemanager');   
-        $this->setDir();     
+        $this->setDir();  
     }
 
     /**
