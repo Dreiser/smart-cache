@@ -48,9 +48,13 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
     public function testSetDir()
     {
         $this->regularFileMock->freeze();
+        
         $this->directoryMock->freeze();
+
         $this->filemanagerMock->freeze();
+
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
+
         $this->assertInstanceOf('Hadamcik\\SmartCache\\FileCache', $fileCache);
     }
 
@@ -68,6 +72,7 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
         $this->filemanagerMock->freeze();
 
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
+
         $this->assertInstanceOf('Hadamcik\\SmartCache\\Utils\\Filemanager\\RegularFile', $fileCache->save(self::KEY, self::VALUE));
     }
 
@@ -78,12 +83,16 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
     {
         $this->directoryMock->getPath()->once()->andReturn(self::PATH);
         $this->directoryMock->freeze();
+
         $this->filemanagerMock->fileExists($this->getCachedFilePath())->once()->andReturn(true);
         $this->filemanagerMock->getRegularFile($this->getCachedFilePath())->once()->andReturn($this->regularFileMock);
         $this->filemanagerMock->freeze();
+
         $this->regularFileMock->getContent()->once()->andReturn(self::SERIALIZED_VALUE);
         $this->regularFileMock->freeze();
+
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
+
         $this->assertSame(self::VALUE, $fileCache->load(self::KEY));
     }
 
