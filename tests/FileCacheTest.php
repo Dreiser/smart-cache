@@ -21,6 +21,9 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
     /** @var string */
     private $temp;
 
+    /**
+     * Tests setUp
+     */
     public function setUp()
     {
         $this->markTestSkipped(
@@ -115,14 +118,6 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return string
-     */
-    private function getTempDir()
-    {
-    	return $this->temp;
-    }
-
-    /**
      * @param string $temp
      * @return FileCacheTest
      */
@@ -130,5 +125,13 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
     {
     	$this->temp = $temp;
     	return $this;
+    }
+
+    /**
+     * @return string
+     */
+    private function getTempDir()
+    {
+        return $this->temp;
     }
 }
