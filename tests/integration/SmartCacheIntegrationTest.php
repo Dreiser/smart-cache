@@ -121,6 +121,6 @@ class SmartCacheIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     private function getTempPath()
     {
-        return __DIR__ . '/../temp/FileCache';
+        return __DIR__ . '/temp/FileCache';
     }
 }
