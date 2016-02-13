@@ -16,6 +16,7 @@ abstract class File
 
 	/**
 	 * @param string $path
+	 * @throws FileDoNotExistsException
 	 */
 	public function __construct($path)
 	{

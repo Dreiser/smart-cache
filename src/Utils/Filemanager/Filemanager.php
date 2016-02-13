@@ -20,6 +20,7 @@ class Filemanager
 	 * @return RegularFile
 	 * @throws FileOpenFailedException
 	 * @throws FileWriteFailedException
+	 * @throws FileDoNotExistsException
 	 */
 	public function createFile($path, $content = null)
 	{
@@ -61,6 +62,7 @@ class Filemanager
 
 	/**
 	 * @return Directory
+	 * @throws FileDoNotExistsException
 	 */
 	public function getDirectory($path)
 	{
@@ -69,6 +71,7 @@ class Filemanager
 
 	/**
 	 * @return RegularFile
+	 * @throws FileDoNotExistsException
 	 */
 	public function getRegularFile($path)
 	{

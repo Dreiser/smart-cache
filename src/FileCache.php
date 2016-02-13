@@ -44,6 +44,7 @@ class FileCache
 	 * @param string $key
 	 * @param mixed $value
 	 * @return RegularFile
+	 * @throws FileDoNotExistsException
 	 */
 	public function save($key, $value)
 	{
@@ -54,14 +55,15 @@ class FileCache
 	 * @param string $key
 	 * @return mixed
 	 * @throws KeyNotFoundException
+	 * @throws FileDoNotExistsException
 	 */
 	public function load($key)
 	{
-		if($this->hasKey($key)) {
-			$file = $this->filemanager->getRegularFile($this->getCacheFilePath($key));
-			return unserialize($file->getContent());
+		if(!$this->hasKey($key)) {
+			throw new KeyNotFoundException();
 		}
-		throw new KeyNotFoundException();
+		$file = $this->filemanager->getRegularFile($this->getCacheFilePath($key));
+		return unserialize($file->getContent());
 	}
 
 	/**

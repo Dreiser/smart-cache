@@ -58,11 +58,11 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetDirNotExistException()
     {
-        $this->filemanagerMock->fileExists('not exist')->once()->andReturn(false);
+        $this->filemanagerMock->fileExists(self::PATH)->once()->andReturn(false);
         $this->filemanagerMock->freeze();
 
         $this->setExpectedException('Hadamcik\SmartCache\DirNotExistsException');
-        $fileCache = new FileCache('not exist', $this->filemanagerMock);
+        $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
     }
 
     /**
@@ -114,6 +114,24 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
 
         $this->assertSame(self::VALUE, $fileCache->load(self::KEY));
+    }
+
+    /**
+     * Test load key not found exception
+     */
+    public function testLoadKeyNotFound()
+    {
+        $this->setDir(); 
+        $this->getDir();
+        $this->directoryMock->freeze();
+
+        $this->filemanagerMock->fileExists($this->getCachedFilePath())->once()->andReturn(false);
+        $this->filemanagerMock->freeze();
+
+        $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
+
+        $this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
+        $fileCache->load(self::KEY);
     }
 
     /**
