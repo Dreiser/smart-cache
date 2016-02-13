@@ -48,7 +48,7 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
     public function testSetDir()
     {
         $this->regularFileMock->freeze();
-        
+
         $this->directoryMock->freeze();
 
         $this->filemanagerMock->freeze();
@@ -65,7 +65,7 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
     {
         $this->regularFileMock->freeze();
 
-        $this->directoryMock->getPath()->once()->andReturn(self::PATH);
+        $this->getDir();
         $this->directoryMock->freeze();
 
         $this->filemanagerMock->createFile($this->getCachedFilePath(), self::SERIALIZED_VALUE)->andReturn($this->regularFileMock);
@@ -81,7 +81,7 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoad()
     {
-        $this->directoryMock->getPath()->once()->andReturn(self::PATH);
+        $this->getDir();
         $this->directoryMock->freeze();
 
         $this->filemanagerMock->fileExists($this->getCachedFilePath())->once()->andReturn(true);
@@ -114,5 +114,14 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
         $this->filemanagerMock->isDir($path)->once()->andReturn(true);
         $this->filemanagerMock->isWritable($path)->once()->andReturn(true);
         $this->filemanagerMock->getDirectory($path)->once()->andReturn($this->directoryMock);
+    }
+
+    /**
+     * Sets mock expectations for called method getDir in FileCache
+     * @return void
+     */
+    private function getDir($path = self::PATH)
+    {
+        $this->directoryMock->getPath()->once()->andReturn(self::PATH);        
     }
 }
