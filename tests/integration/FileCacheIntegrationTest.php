@@ -114,12 +114,12 @@ class FileCacheIntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test load method with exception
+     * test load method with key not found exception
      */
-    public function testLoadException()
+    public function testLoadKeyNotFound()
     {
-        $this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
         $fileCache = new FileCache($this->getTempPath(), $this->filemanager);
+        $this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
         $fileCache->load('unknown key');
     }
 
