@@ -12,6 +12,9 @@ require_once __DIR__ . '/../../vendor/autoload.php';
  */
 class MemoryCacheUnitTest extends \PHPUnit_Framework_TestCase
 {
+    const KEY = 'key';
+    const VALUE = 'value';
+
 	/** @var MemoryCache */
 	private $memoryCache;
 
@@ -54,8 +57,8 @@ class MemoryCacheUnitTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testLoad()
 	{
-		$this->memoryCache->save('key', 'value');
-		$this->assertSame('value', $this->memoryCache->load('key'));
+		$this->memoryCache->save(self::KEY, self::VALUE);
+		$this->assertSame(self::VALUE, $this->memoryCache->load(self::KEY));
 	}
 
 	/**
@@ -64,7 +67,7 @@ class MemoryCacheUnitTest extends \PHPUnit_Framework_TestCase
 	public function testLoadException()
 	{
 		$this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
-		$this->memoryCache->load('unknown key');
+		$this->memoryCache->load(self::KEY);
 	}
 
 	/**
@@ -74,9 +77,9 @@ class MemoryCacheUnitTest extends \PHPUnit_Framework_TestCase
 	{
 		$object = new TestClass('value');
 		$object->publicParam = 'public';
-		$this->memoryCache->save('object', $object);
-		$this->assertEquals($object, $this->memoryCache->load('object'));
+		$this->memoryCache->save(self::KEY, $object);
+		$this->assertEquals($object, $this->memoryCache->load(self::KEY));
 		$object->setPrivateParam('new value');
-		$this->assertNotEquals($object, $this->memoryCache->load('object'));
+		$this->assertNotEquals($object, $this->memoryCache->load(self::KEY));
 	}
 }

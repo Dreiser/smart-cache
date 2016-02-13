@@ -19,11 +19,8 @@ use Hadamcik\SmartCache\Utils\Filemanager\Directory;
  */
 class SmartCacheIntegrationTest extends \PHPUnit_Framework_TestCase
 {
-	const PATH = 'path';
     const KEY = 'key';
-    const NOT_EXIST_KEY = 'not_exist_key';
     const VALUE = 'value';
-    const SERIALIZED_VALUE = 's:5:"value";';
 
 	/** @var FileCache */
 	private $fileCache;

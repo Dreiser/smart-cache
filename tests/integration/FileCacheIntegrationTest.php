@@ -18,6 +18,9 @@ use Hadamcik\SmartCache\Utils\Filemanager\Directory;
  */
 class FileCacheIntegrationTest extends \PHPUnit_Framework_TestCase
 {
+    const KEY = 'key';
+    const VALUE = 'value';
+
     /** @var Filemanager */
     private $filemanager;
 
@@ -111,8 +114,8 @@ class FileCacheIntegrationTest extends \PHPUnit_Framework_TestCase
     public function testLoad()
     {
         $fileCache = new FileCache($this->getTempPath(), $this->filemanager);
-        $fileCache->save('key', 'value');
-        $this->assertSame('value', $fileCache->load('key'));
+        $fileCache->save(self::KEY, self::VALUE);
+        $this->assertSame(self::VALUE, $fileCache->load(self::KEY));
     }
 
     /**
@@ -122,7 +125,7 @@ class FileCacheIntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $fileCache = new FileCache($this->getTempPath(), $this->filemanager);
         $this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
-        $fileCache->load('unknown key');
+        $fileCache->load(self::KEY);
     }
 
     /**
@@ -133,10 +136,10 @@ class FileCacheIntegrationTest extends \PHPUnit_Framework_TestCase
         $fileCache = new FileCache($this->getTempPath(), $this->filemanager);
         $object = new TestClass('value');
         $object->publicParam = 'public';
-        $fileCache->save('object', $object);
-        $this->assertEquals($object, $fileCache->load('object'));
+        $fileCache->save(self::KEY, $object);
+        $this->assertEquals($object, $fileCache->load(self::KEY));
         $object->setPrivateParam('new value');
-        $this->assertNotEquals($object, $fileCache->load('object'));
+        $this->assertNotEquals($object, $fileCache->load(self::KEY));
     }
 
     /**

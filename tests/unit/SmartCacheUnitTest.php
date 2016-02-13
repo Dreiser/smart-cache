@@ -17,10 +17,8 @@ use Mockista;
  */
 class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 {
-	const PATH = 'path';
     const KEY = 'key';
     const VALUE = 'value';
-    const SERIALIZED_VALUE = 's:5:"value";';
 
 	/** @var Mockista\Mock */
 	private $fileCacheMock;
