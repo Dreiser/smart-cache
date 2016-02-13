@@ -169,7 +169,7 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Test load method key not found exception
 	 */
-	public function testLoadKeyNotFoundException()
+	public function testLoadKeyNotFound()
 	{
 		$this->memoryCacheMock->hasKey(self::KEY)->once()->andReturn(false);
 		$this->memoryCacheMock->load(self::KEY)->never();
