@@ -35,6 +35,14 @@ class FileCacheIntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test construct correctly
+     */
+    public function testConstruct()
+    {
+        $this->assertInstanceOf('Hadamcik\\SmartCache\\FileCache', $fileCache = new FileCache($this->getTempPath(), $this->filemanager));
+    }
+
+    /**
      * Test construct with not existing directory
      */
     public function testConstructDirNotExist()
