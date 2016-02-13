@@ -35,27 +35,33 @@ class FileCacheIntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test construct correctly
+     * Test setDir method correctly
      */
-    public function testConstruct()
-    {
-        $this->assertInstanceOf('Hadamcik\\SmartCache\\FileCache', $fileCache = new FileCache($this->getTempPath(), $this->filemanager));
+    public function testSetDir()
+    { 
+        $fileCache = new FileCache($this->getTempPath(), $this->filemanager);
+        $this->assertInstanceOf('Hadamcik\\SmartCache\\FileCache', $fileCache);
+        $this->assertInstanceOf('Hadamcik\\SmartCache\\FileCache', $fileCache->setDir($this->getTempPath()));
     }
 
     /**
-     * Test construct with not existing directory
+     * Test setDir method with not existing directory
      */
-    public function testConstructDirNotExist()
+    public function testsSetDirDirNotExist()
     {
+        $fileCache = new FileCache($this->getTempPath(), $this->filemanager);
+        $this->assertInstanceOf('Hadamcik\\SmartCache\\FileCache', $fileCache);
         $this->setExpectedException('Hadamcik\SmartCache\DirNotExistsException');
         $fileCache = new FileCache('not exist', $this->filemanager);
     }
 
     /**
-     * Test construct with not directory
+     * Test setDir with not directory
      */
-    public function testConstructNotDir()
+    public function testSetDirNotDir()
     {
+        $fileCache = new FileCache($this->getTempPath(), $this->filemanager);
+        $this->assertInstanceOf('Hadamcik\\SmartCache\\FileCache', $fileCache);
         $this->setExpectedException('Hadamcik\SmartCache\NotDirException');
         $fileCache = new FileCache(__DIR__ . '/FileCacheIntegrationTest.php', $this->filemanager);
     }
