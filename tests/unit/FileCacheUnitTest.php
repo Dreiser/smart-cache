@@ -4,7 +4,6 @@ namespace Hadamcik\SmartCache;
 
 require_once __DIR__ . '/../../src/FileCache.php';
 require_once __DIR__ . '/../../src/Utils/Filemanager/Filemanager.php';
-require_once __DIR__ . '/../Utils/Temp.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../vendor/jiriknesl/mockista/bootstrap.php';
 
@@ -39,8 +38,7 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->regularFileMock = Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\RegularFile');
         $this->directoryMock = Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\Directory');
-        $this->filemanagerMock = Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\Filemanager');   
-        $this->setDir();  
+        $this->filemanagerMock = Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\Filemanager');    
     }
 
     /**
@@ -48,16 +46,44 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetDir()
     {
+        $this->setDir(); 
+
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
 
         $this->assertInstanceOf('Hadamcik\\SmartCache\\FileCache', $fileCache);
     }
 
     /**
+     * Test setDir method directory not exist exception
+     */
+    public function testSetDirNotExistException()
+    {
+        $this->filemanagerMock->fileExists('not exist')->once()->andReturn(false);
+        $this->filemanagerMock->freeze();
+
+        $this->setExpectedException('Hadamcik\SmartCache\DirNotExistsException');
+        $fileCache = new FileCache('not exist', $this->filemanagerMock);
+    }
+
+    /**
+     * Test setDir method not directory exception
+     */
+    public function testSetDirNotDirException()
+    {
+        $this->filemanagerMock->fileExists(self::PATH)->once()->andReturn(true);        
+        $this->filemanagerMock->isDir(self::PATH)->once()->andReturn(false);
+        $this->filemanagerMock->freeze();
+
+        $this->setExpectedException('Hadamcik\SmartCache\NotDirException');
+        $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
+    }
+
+    /**
      * Test save method
      */
     public function testSave()
-    {
+    {        
+        $this->setDir(); 
         $this->getDir();
         $this->directoryMock->freeze();
 
@@ -74,6 +100,7 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoad()
     {
+        $this->setDir(); 
         $this->getDir();
         $this->directoryMock->freeze();
 
@@ -94,6 +121,7 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasKey()
     {
+        $this->setDir(); 
         $this->getDir();
         $this->directoryMock->freeze();
         
