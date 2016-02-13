@@ -39,6 +39,9 @@ class SmartCacheUnitTest extends \PHPUnit_Framework_TestCase
 		$this->memoryCacheMock = Mockista\mock('Hadamcik\\SmartCache\\MemoryCache');
 	}
 
+	/**
+	 * Test save method
+	 */
 	public function testSave()
 	{
 		$this->fileCacheMock->save(self::KEY, self::VALUE)->once();
