@@ -4,10 +4,12 @@ namespace Hadamcik\SmartCache;
 
 require_once __DIR__ . '/../../src/FileCache.php';
 require_once __DIR__ . '/../../src/Utils/Filemanager/Filemanager.php';
+require_once __DIR__ . '/../../src/Exceptions/Utils/Filemanager/FileDoNotExistsException.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../vendor/jiriknesl/mockista/bootstrap.php';
 
 use Mockista;
+use Hadamcik\SmartCache\Utils\Filemanager\FileDoNotExistsException;
 
 /**
  * Class FileCacheUnitTest
@@ -130,7 +132,28 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
 
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
 
-        $this->setExpectedException('Hadamcik\SmartCache\KeyNotFoundException');
+        $this->setExpectedException('Hadamcik\\SmartCache\\KeyNotFoundException');
+        $fileCache->load(self::KEY);
+    }
+
+    /**
+     * Test load file do not exist exception
+     */
+    public function testLoadFileDoNotExist()
+    {
+        $this->setDir(); 
+        $this->getDir();
+        $this->directoryMock->freeze();
+
+        $filedoNotExistException = new FileDoNotExistsException;
+
+        $this->filemanagerMock->fileExists($this->getCachedFilePath())->once()->andReturn(true);
+        $this->filemanagerMock->getRegularFile($this->getCachedFilePath())->once()->andThrow($filedoNotExistException);
+        $this->filemanagerMock->freeze();
+
+        $fileCache = new FileCache(self::PATH, $this->filemanagerMock);        
+
+        $this->setExpectedException('Hadamcik\\SmartCache\\Utils\\Filemanager\\FileDoNotExistsException');
         $fileCache->load(self::KEY);
     }
 
