@@ -2,10 +2,17 @@
 
 namespace Hadamcik\SmartCache;
 
+require_once __DIR__ . '/Utils/Filemanager/Filemanager.php';
+require_once __DIR__ . '/Utils/Filemanager/RegularFile.php';
+require_once __DIR__ . '/Utils/Filemanager/Directory.php';
 require_once __DIR__ . '/Exceptions/DirNotExistsException.php';
 require_once __DIR__ . '/Exceptions/DirNotWritableException.php';
 require_once __DIR__ . '/Exceptions/NotDirException.php';
 require_once __DIR__ . '/Exceptions/KeyNotFoundException.php';
+
+use Hadamcik\SmartCache\Utils\Filemanager\Filemanager;
+use Hadamcik\SmartCache\Utils\Filemanager\RegularFile;
+use Hadamcik\SmartCache\Utils\Filemanager\Directory;
 
 /**
  * Class FileCache
@@ -14,8 +21,11 @@ require_once __DIR__ . '/Exceptions/KeyNotFoundException.php';
  */
 class FileCache
 {
-	/** @var string */
+	/** @var Directory */
 	private $dir;
+
+	/** @var Filemanager */
+	private $filemanager;
 
 	/**
 	 * @param string $dir
@@ -23,19 +33,20 @@ class FileCache
 	 * @throws NotDirException
 	 * @throws DirNotWritableException
 	 */
-	public function __construct($dir)
+	public function __construct($dir, Filemanager $filemanager)
 	{
 		$this->setDir($dir);
+		$this->filemanager = $filemanager;
 	}
 
 	/**
 	 * @param string $key
 	 * @param mixed $value
-	 * @return void
+	 * @return RegularFile
 	 */
 	public function save($key, $value)
 	{
-		file_put_contents($this->getDir() . '/' . $key, serialize($value));
+		return $this->filemanager->createFile($this->getDir() . '/' . $key, serialize($value));
 	}
 
 	/**
@@ -46,7 +57,8 @@ class FileCache
 	public function load($key)
 	{
 		if($this->hasKey($key)) {
-			return unserialize(file_get_contents($this->getDir() . '/' . $key));
+			$file = new RegularFile($this->getDir() . '/' . $key);
+			return unserialize($file->getContent());
 		}
 		throw new KeyNotFoundException();
 	}
@@ -57,7 +69,7 @@ class FileCache
 	 */
 	public function hasKey($key)
 	{
-		return (file_exists($this->getDir() . '/' . $key));
+		return $this->filemanager->fileExists($this->getDir() . '/' . $key);
 	}
 
 	/**
@@ -65,7 +77,7 @@ class FileCache
 	 */
 	public function getDir()
 	{
-		return $this->dir;
+		return $this->dir->getPath();
 	}
 
 	/**
@@ -75,18 +87,18 @@ class FileCache
 	 * @throws NotDirException
 	 * @throws DirNotWritableException
 	 */
-	private function setDir($dir)
+	public function setDir($path)
 	{
-		if(!file_exists($dir)) {
+		if(!$this->filemanager->fileExists($path)) {
 			throw new DirNotExistsException();
 		}
-		if(!is_dir($dir)) {
+		if(!$this->filemanager->isDir($path)) {
 			throw new NotDirException();
 		}
-		if(!is_writable($dir)) {
+		if(!$this->filemanager->isWritable($path)) {
 			throw new DirNotWritableException();
 		}
-		$this->dir = $dir;
+		$this->dir = new Directory($path);
 		return $this;
 	}
 }
