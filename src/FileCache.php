@@ -44,7 +44,8 @@ class FileCache
 	 * @param string $key
 	 * @param mixed $value
 	 * @return RegularFile
-	 * @throws FileDoNotExistsException
+	 * @throws FileOpenFailedException
+	 * @throws FileWriteFailedException
 	 */
 	public function save($key, $value)
 	{

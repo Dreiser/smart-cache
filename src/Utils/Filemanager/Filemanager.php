@@ -20,7 +20,6 @@ class Filemanager
 	 * @return RegularFile
 	 * @throws FileOpenFailedException
 	 * @throws FileWriteFailedException
-	 * @throws FileDoNotExistsException
 	 */
 	public function createFile($path, $content = null)
 	{
