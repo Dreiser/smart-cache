@@ -34,6 +34,9 @@ class SmartCacheTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function setUp()
 	{
+		$this->markTestSkipped(
+            'Refactor required'
+        );
 		$this->setTempDir(__DIR__ . '/temp/SmartCache');
         Temp::cleanUp($this->getTempDir());
 		$this->fileCache = new FileCache($this->getTempDir());

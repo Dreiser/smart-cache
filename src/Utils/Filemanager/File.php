@@ -19,7 +19,8 @@ abstract class File
 	 */
 	public function __construct($path)
 	{
-		if(!Filemanager::fileExists($path)) {
+		$filemanager = new Filemanager();
+		if(!$filemanager->fileExists($path)) {
 			throw new FileDoNotExistsException();
 		}
 		$this->path = $path;

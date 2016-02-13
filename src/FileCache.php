@@ -29,14 +29,15 @@ class FileCache
 
 	/**
 	 * @param string $dir
+	 * @param Filemanager $filemanager
 	 * @throws DirNotExistsException
 	 * @throws NotDirException
 	 * @throws DirNotWritableException
 	 */
 	public function __construct($dir, Filemanager $filemanager)
 	{
-		$this->setDir($dir);
 		$this->filemanager = $filemanager;
+		$this->setDir($dir);
 	}
 
 	/**
@@ -98,7 +99,7 @@ class FileCache
 		if(!$this->filemanager->isWritable($path)) {
 			throw new DirNotWritableException();
 		}
-		$this->dir = new Directory($path);
+		$this->dir = $this->filemanager->getDirectory($path);
 		return $this;
 	}
 }

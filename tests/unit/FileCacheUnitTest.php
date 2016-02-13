@@ -3,6 +3,7 @@
 namespace Hadamcik\SmartCache;
 
 require_once __DIR__ . '/../../src/FileCache.php';
+require_once __DIR__ . '/../../src/Utils/Filemanager/Filemanager.php';
 require_once __DIR__ . '/../Utils/Temp.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../vendor/jiriknesl/mockista/bootstrap.php';
@@ -16,29 +17,20 @@ use Mockista;
  */
 class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Mockista\Mock */
-    private $filemanagerMock;
-
-    /** @var FileCache */
-    private $fileCache;
-
     /**
-     * Tests setUp
+     * Test setDir method
      */
-    public function setUp()
+    public function testSetDir()
     {
-        $this->filemanagerMock = Mockista\mock("NejakaTrida");
-        $this->fileCache = new FileCache($this->getTempDir(), $this->filemanagerMock);
-    }
-
-    /**
-     * Test construct method correctly
-     */
-    public function testConstruct()
-    {
-        $this->filemanagerMock->fileExists->once();
-        $this->filemanagerMock->isDir->once();
-        $this->filemanagerMock->isWritable->once();
-        $this->assertInstanceOf('Hadamcik\\SmartCache\\Utils\\Filemanager\\Directory', $fileCache->getDir());
+        $directoryMock = new Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\Directory');
+        $directoryMock->freeze();
+        $filemanagerMock = Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\Filemanager');
+        $filemanagerMock->fileExists('')->once()->andReturn(true);
+        $filemanagerMock->isDir('')->once()->andReturn(true);
+        $filemanagerMock->isWritable('')->once()->andReturn(true);
+        $filemanagerMock->getDirectory('')->once()->andReturn($directoryMock);
+        $filemanagerMock->freeze();
+        $fileCache = new FileCache('', $filemanagerMock);
+        $this->assertInstanceOf('Hadamcik\\SmartCache\\FileCache', $fileCache);
     }
 }

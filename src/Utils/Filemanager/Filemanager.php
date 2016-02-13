@@ -4,6 +4,7 @@ namespace Hadamcik\SmartCache\Utils\Filemanager;
 
 require_once __DIR__ . '/../../Exceptions/Utils/Filemanager/FileOpenFailedException.php';
 require_once __DIR__ . '/../../Exceptions/Utils/Filemanager/FileWriteFailedException.php';
+require_once __DIR__ . '/Directory.php';
 require_once __DIR__ . '/RegularFile.php';
 
 /**
@@ -56,5 +57,13 @@ class Filemanager
 	public function isWritable($path)
 	{
 		return is_writable($path);
+	}
+
+	/**
+	 * @return Directory
+	 */
+	public function getDirectory($path)
+	{
+		return new Directory($path);
 	}
 }
