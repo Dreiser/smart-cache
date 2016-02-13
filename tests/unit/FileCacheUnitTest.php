@@ -35,7 +35,8 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
     {
         $this->regularFileMock = Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\RegularFile');
         $this->directoryMock = Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\Directory');
-        $this->filemanagerMock = Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\Filemanager');
+        $this->filemanagerMock = Mockista\mock('Hadamcik\\SmartCache\\Utils\\Filemanager\\Filemanager');   
+        $this->setDir();     
     }
 
     /**
@@ -44,10 +45,7 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
     public function testSetDir()
     {
         $this->directoryMock->freeze();
-
-        $this->setDir();
         $this->filemanagerMock->freeze();
-
         $fileCache = new FileCache(self::PATH, $this->filemanagerMock);
         $this->assertInstanceOf('Hadamcik\\SmartCache\\FileCache', $fileCache);
     }
@@ -62,7 +60,6 @@ class FileCacheUnitTest extends \PHPUnit_Framework_TestCase
         $this->directoryMock->getPath()->once()->andReturn(self::PATH);
         $this->directoryMock->freeze();
 
-        $this->setDir();
         $this->filemanagerMock->createFile($this->getCachedFilePath(), self::SERIALIZE_VALUE)->andReturn($this->regularFileMock);
         $this->filemanagerMock->freeze();
 
