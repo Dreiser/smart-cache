@@ -2,7 +2,7 @@
 
 namespace Hadamcik\SmartCache;
 
-require_once __DIR__ . '/TestClass.php';
+require_once __DIR__ . '/../TestClass.php';
 require_once __DIR__ . '/../../src/FileCache.php';
 require_once __DIR__ . '/../../src/Utils/Filemanager/Filemanager.php';
 require_once __DIR__ . '/../../src/Utils/Filemanager/Directory.php';

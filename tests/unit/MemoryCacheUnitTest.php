@@ -2,6 +2,7 @@
 
 namespace Hadamcik\SmartCache;
 
+require_once __DIR__ . '/../TestClass.php';
 require_once __DIR__ . '/../../src/MemoryCache.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
